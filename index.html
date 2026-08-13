@@ -247,11 +247,25 @@ html,body{
   transform-origin:center bottom;
 }
 .prize .media{
-  flex:1; position:relative; overflow:hidden; background:var(--bg2);
+  flex:1; position:relative; overflow:hidden; background:#eee;
   display:flex; align-items:center; justify-content:center;
 }
-.prize .media img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* blurred copy of the same photo fills the empty bands (no crop, no stretch) */
+.prize .media .bg{
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  filter:blur(28px) brightness(.92) saturate(1.1);
+  transform:scale(1.18);
+}
+/* the real photo, shown WHOLE — never cropped, never distorted */
+.prize .media img{
+  position:relative; z-index:1; display:block;
+  max-width:100%; max-height:100%; width:auto; height:auto;
+  object-fit:contain;
+  box-shadow:0 10px 34px rgba(0,0,0,.28);
+}
 .prize .media .ph{
+  position:relative; z-index:2;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:10px; text-align:center; padding:24px;
   color:var(--muted);
@@ -406,7 +420,8 @@ html,body{
     <div class="prize p1" data-i="1">
       <span class="badge">Приз 1</span>
       <div class="media">
-        <img src="prize_labo.jpg" alt="Автомобиль LABO" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="bg" style="background-image:url('prize_labo.jpg')"></div>
+        <img src="prize_labo.jpg" alt="Автомобиль LABO" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
         <div class="ph" style="display:none"><div class="ph-t">LABO</div><div class="ph-s">prize_labo.jpg</div></div>
       </div>
       <div class="cap"><div class="k">Главный приз</div><div class="m">Автомобиль <span>LABO</span></div></div>
@@ -414,7 +429,8 @@ html,body{
     <div class="prize p2" data-i="2">
       <span class="badge">Приз 2</span>
       <div class="media">
-        <img src="prize_stanok.jpg" alt="Кромочный станок" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="bg" style="background-image:url('prize_stanok.jpg')"></div>
+        <img src="prize_stanok.jpg" alt="Кромочный станок" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
         <div class="ph" style="display:none"><div class="ph-t">Станок</div><div class="ph-s">prize_stanok.jpg</div></div>
       </div>
       <div class="cap"><div class="k">Главный приз</div><div class="m">Кромочный <span>станок</span></div></div>
@@ -422,7 +438,8 @@ html,body{
     <div class="prize p3" data-i="3">
       <span class="badge">Приз 3</span>
       <div class="media">
-        <img src="prize_vietnam.jpg" alt="Путёвки во Вьетнам" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="bg" style="background-image:url('prize_vietnam.jpg')"></div>
+        <img src="prize_vietnam.jpg" alt="Путёвки во Вьетнам" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
         <div class="ph" style="display:none"><div class="ph-t">Вьетнам</div><div class="ph-s">prize_vietnam.jpg</div></div>
       </div>
       <div class="cap"><div class="k">Главный приз</div><div class="m">3 путёвки во <span>Вьетнам</span></div></div>
@@ -490,7 +507,7 @@ async function loadData(){
     else if(json && Array.isArray(json.rows)) list = json.rows;
   }catch(e){ /* offline / not deployed → demo */ }
 
-  people = normalize((list && list.length) ? list : DEMO);
+  people = normalize((list && list.length) ? list : []);
   totalCoupons = people.reduce((s,p) => s + p.coupons, 0);
   render();
 }
