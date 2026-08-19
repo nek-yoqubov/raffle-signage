@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>День клиента — 10 дней в PRO MEBEL</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#f3efe8; --bg2:#eae4d9; --panel:#fff;
+  --ink:#1c1712; --ink-2:#4a4238; --muted:#948a79; --line:#e2dacb;
+  --orange:#ef7d1a; --orange-d:#d9600a; --gold:#caa24a; --dark:#16130f;
+  --accent:var(--orange);        /* акцент по умолчанию — оранжевый */
+  --accent-d:var(--orange-d);
+  --shadow:0 10px 30px rgba(40,28,10,.10);
+}
+/* последние 24 часа — акцент в тревожный красный */
+:root.urgent{ --accent:#e0342a; --accent-d:#b81f16; }
+
+html,body{
+  width:100%; height:100%;
+  background:var(--bg);
+  font-family:'Manrope',system-ui,sans-serif;
+  color:var(--ink);
+  overflow:hidden;
+}
+
+.screen{
+  position:relative; width:100vw; height:100vh;
+  display:flex; flex-direction:column;
+  background:radial-gradient(120% 60% at 50% -10%, #fbf7f0 0%, var(--bg) 55%), var(--bg);
+}
+
+/* ===== HEADER (как у табло) ===== */
+.header{
+  flex-shrink:0; background:var(--panel);
+  padding:clamp(10px,1.6vh,20px) clamp(18px,3.4vw,40px);
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:4px solid var(--accent);
+  box-shadow:0 6px 18px rgba(40,28,10,.06);
+  transition:border-color .5s ease;
+}
+.brand{ display:flex; align-items:center; gap:16px; }
+.brand img{ height:clamp(38px,5.2vh,62px); width:auto; display:block; }
+.brand-fallback{ display:none; align-items:center; gap:12px;
+  font-family:'Bebas Neue',sans-serif; letter-spacing:.06em; }
+.brand-hex{ width:40px; height:44px; background:var(--orange);
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+  display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.5rem; }
+.brand-name{ color:var(--ink); font-size:clamp(1.4rem,2.4vw,2.1rem); line-height:1; }
+.brand-name b{ color:var(--orange); font-weight:400; }
+
+.head-pill{
+  display:flex; align-items:center; gap:9px;
+  background:rgba(239,125,26,.1); border:1px solid rgba(239,125,26,.35);
+  color:var(--accent-d); border-radius:100px;
+  padding:8px 16px; font-size:clamp(.56rem,1vw,.72rem);
+  letter-spacing:.14em; text-transform:uppercase; font-weight:700; white-space:nowrap;
+}
+.head-dot{ width:8px; height:8px; border-radius:50%; background:var(--accent);
+  animation:pulse 1.7s ease-in-out infinite; }
+@keyframes pulse{
+  0%,100%{ opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(239,125,26,.5); }
+  50%{ opacity:.55; transform:scale(1.35); box-shadow:0 0 0 6px rgba(239,125,26,0); }
+}
+
+/* ===== STAGE ===== */
+.stage{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(14px,3.3vh,52px);
+  padding:clamp(16px,3vh,44px) clamp(20px,4vw,60px);
+  text-align:center;
+}
+
+.eyebrow{
+  font-size:clamp(.66rem,1.5vw,1rem); letter-spacing:.2em; text-transform:uppercase;
+  color:var(--accent-d); font-weight:800;
+}
+
+/* headline / day number */
+.mega{
+  font-family:'Bebas Neue',sans-serif;
+  line-height:.9; letter-spacing:.02em; color:var(--ink);
+  font-size:clamp(3rem,12.5vw,10rem);
+}
+.mega .o{ color:var(--accent); }
+.mega .slash{ color:var(--muted); font-size:.55em; }
+
+.headline{
+  font-family:'Bebas Neue',sans-serif; letter-spacing:.03em; line-height:.95; color:var(--ink);
+  font-size:clamp(2.2rem,7.5vw,5.5rem);
+}
+.headline .o{ color:var(--accent); }
+
+.subtitle{
+  font-size:clamp(1rem,2.4vw,1.7rem); color:var(--ink-2); font-weight:600;
+  max-width:22ch;
+}
+
+/* ===== PROGRESS LENTE (10 сегментов) ===== */
+.lente-wrap{ width:min(88vw,900px); }
+.lente{
+  display:flex; gap:clamp(4px,.9vw,9px); width:100%;
+}
+.seg{
+  flex:1 1 0; height:clamp(9px,1.5vh,16px); border-radius:100px;
+  background:var(--line); position:relative;
+  transition:background .4s ease;
+}
+.seg.done{ background:var(--accent); }
+.seg.today{ background:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
+  animation:segPulse 1.6s ease-in-out infinite; }
+@keyframes segPulse{
+  0%,100%{ box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent); }
+  50%{ box-shadow:0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent); }
+}
+.lente-nums{
+  display:flex; gap:clamp(4px,.9vw,9px); width:100%; margin-top:8px;
+}
+.lente-nums span{
+  flex:1 1 0; text-align:center; font-size:clamp(.5rem,1vw,.72rem);
+  color:var(--muted); font-weight:700; font-variant-numeric:tabular-nums;
+}
+.lente-nums span.on{ color:var(--accent-d); }
+
+/* ===== THEME OF DAY ===== */
+.theme{
+  font-family:'Bebas Neue',sans-serif; letter-spacing:.02em; line-height:1;
+  font-size:clamp(1.8rem,5.6vw,4rem); color:var(--ink);
+}
+
+/* gift row */
+.gift{
+  display:inline-flex; align-items:center; gap:14px;
+  background:linear-gradient(180deg,#fff4e6,#ffe9cf);
+  border:1px solid rgba(239,125,26,.35); border-radius:16px;
+  padding:clamp(10px,1.6vh,16px) clamp(16px,2.4vw,26px);
+  box-shadow:var(--shadow); max-width:min(90vw,820px);
+}
+.gift .ic{
+  flex-shrink:0; width:clamp(30px,3.6vw,44px); height:clamp(30px,3.6vw,44px);
+  color:var(--accent-d);
+}
+.gift .g-txt{ text-align:left; }
+.gift .g-lbl{ font-size:clamp(.54rem,1vw,.68rem); letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted); font-weight:800; }
+.gift .g-val{ font-size:clamp(1rem,2.3vw,1.5rem); color:var(--ink); font-weight:700; line-height:1.15; }
+
+.slogan{ font-size:clamp(1rem,2.3vw,1.55rem); color:var(--ink-2); font-weight:600; font-style:italic;
+  max-width:26ch; }
+
+/* ===== COUNTDOWN ===== */
+.cd-cap{ font-size:clamp(.66rem,1.4vw,.95rem); letter-spacing:.18em; text-transform:uppercase;
+  color:var(--muted); font-weight:800; margin-bottom:2px; }
+.countdown{ display:flex; align-items:flex-start; gap:clamp(8px,1.6vw,18px); }
+.cd-unit{ display:flex; flex-direction:column; align-items:center; }
+.cd-num{
+  font-family:'Bebas Neue',sans-serif; line-height:.9; color:var(--ink);
+  font-size:clamp(2.4rem,9.5vw,6.5rem);
+  font-variant-numeric:tabular-nums;
+  min-width:1.7ch; text-align:center;
+}
+.urgent .cd-num{ color:var(--accent-d); animation:numPulse 1s ease-in-out infinite; }
+@keyframes numPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
+.cd-lbl{ font-size:clamp(.5rem,1vw,.72rem); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); font-weight:700; margin-top:4px; }
+.cd-sep{ font-family:'Bebas Neue',sans-serif; color:var(--accent);
+  font-size:clamp(2rem,7vw,5rem); line-height:.9; margin-top:.02em; }
+
+/* tomorrow badge */
+.tomorrow{
+  display:none; align-items:center; gap:10px;
+  background:var(--accent); color:#fff; font-family:'Bebas Neue',sans-serif;
+  letter-spacing:.06em; font-size:clamp(1.1rem,2.6vw,1.8rem);
+  padding:clamp(8px,1.4vh,14px) clamp(18px,3vw,30px); border-radius:100px;
+  box-shadow:0 10px 30px rgba(224,52,42,.35);
+}
+.urgent .tomorrow.show{ display:inline-flex; }
+
+/* ===== FINAL SCHEDULE ===== */
+.schedule{ width:min(88vw,720px); display:flex; flex-direction:column; gap:clamp(6px,1vh,10px); }
+.sch-row{
+  display:flex; align-items:center; gap:16px;
+  background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:clamp(9px,1.4vh,15px) clamp(14px,2vw,22px);
+  box-shadow:0 4px 14px rgba(40,28,10,.05);
+}
+.sch-row .t{ font-family:'Bebas Neue',sans-serif; font-size:clamp(1.3rem,3vw,2rem);
+  color:var(--ink); min-width:3.4ch; font-variant-numeric:tabular-nums; }
+.sch-row .e{ flex:1; text-align:left; font-size:clamp(.95rem,2vw,1.3rem);
+  color:var(--ink-2); font-weight:600; }
+.sch-row.next{ border-color:var(--accent); background:linear-gradient(180deg,#fff6ec,#fff);
+  box-shadow:0 8px 22px rgba(239,125,26,.16); }
+.sch-row.next .t{ color:var(--accent-d); }
+.sch-row.past{ opacity:.45; }
+.sch-row .dot{ width:9px; height:9px; border-radius:50%; background:var(--line); flex-shrink:0; }
+.sch-row.next .dot{ background:var(--accent); animation:pulse 1.6s ease-in-out infinite; }
+.sch-row.past .dot{ background:var(--accent); }
+
+/* ===== FOOTER ===== */
+.footer{
+  flex-shrink:0; background:var(--dark); color:#d8cdb8;
+  padding:clamp(9px,1.3vh,15px) clamp(18px,3.4vw,40px);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  border-top:4px solid var(--accent); transition:border-color .5s ease;
+}
+.footer .f-l{ font-family:'Bebas Neue',sans-serif; letter-spacing:.08em;
+  font-size:clamp(.9rem,2vw,1.4rem); }
+.footer .f-l b{ color:var(--orange); }
+.footer .f-r{ font-size:clamp(.56rem,1.1vw,.74rem); letter-spacing:.12em;
+  text-transform:uppercase; color:#a99a80; font-weight:700; white-space:nowrap; }
+
+/* значок-молния для плашки «финал уже завтра» (без эмодзи) */
+.tomorrow svg{ width:1em; height:1em; flex-shrink:0; }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .head-dot,.seg.today,.urgent .cd-num,.sch-row.next .dot{ animation:none !important; }
+}
+</style>
+</head>
+<body>
+<div class="screen" id="screen">
+
+  <div class="header">
+    <div class="brand">
+      <img id="logo" src="logo_promebel.png" alt="PRO MEBEL"
+           onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
+      <div class="brand-fallback" id="logoFallback">
+        <div class="brand-hex">P</div>
+        <div class="brand-name">PRO<b>MEBEL</b></div>
+      </div>
+    </div>
+    <div class="head-pill"><span class="head-dot"></span><span id="headPill">День клиента · 10 дней</span></div>
+  </div>
+
+  <div class="stage" id="stage"><!-- динамически --></div>
+
+  <div class="footer">
+    <div class="f-l">ДЕНЬ КЛИЕНТА — <b>10 ДНЕЙ</b> В PRO MEBEL</div>
+    <div class="f-r" id="footR">20–29 августа · Худжанд</div>
+  </div>
+</div>
+
+<script>
+// ========================= КОНФИГ =========================
+const START = new Date('2026-08-20T00:00:00+05:00'); // День 1, старт акции
+const FINAL = new Date('2026-08-29T15:00:00+05:00'); // День 10, главный розыгрыш
+const TZ_LABEL = 'Худжанд';
+
+const DAYS = [
+  { day:1,  title:'10 дней подарков начинаются!', gift:'Стартовый купон каждому покупателю',
+    slogan:'10 дней. 10 розыгрышей. Большой финал.' },
+  { day:2,  title:'Больше ЛДСП — больше шансов', gift:'Сертификат на ЛДСП / инструмент для мебельщика',
+    slogan:'Чем больше объём — тем больше купонов.' },
+  { day:3,  title:'Мебель начинается с деталей', gift:'Набор инструмента / органайзер / сертификат',
+    slogan:'Blum, GTV, Starax, AGT — фурнитура дня.' },
+  { day:4,  title:'Собери свою мебель', gift:'Коробка сюрприз: подарок / скидка / купон',
+    slogan:'Комплект выгоднее: ЛДСП + кромка + фурнитура.' },
+  { day:5,  title:'Счастливый чек', gift:'Случайные чеки дня получают подарки',
+    slogan:'Сегодня каждый чек может стать выигрышным.' },
+  { day:6,  title:'Приведи друга', gift:'Дополнительные купоны обоим',
+    slogan:'Приводи мебельщика — выигрывать будем вместе.' },
+  { day:7,  title:'День мастера', gift:'Подарок победителю конкурса работ',
+    slogan:'PRO MEBEL для тех, кто создаёт мебель.' },
+  { day:8,  title:'Охота за подарками', gift:'Карта удачи: купоны / скидка / подарок',
+    slogan:'Азарт прямо во время покупки.' },
+  { day:9,  title:'Большой предфинал', gift:'×2 купона на финальный розыгрыш',
+    slogan:'Завтра финал! Успей увеличить покупку.' },
+  { day:10, title:'Финал «SUPER DAY»', gift:'Главный приз акции — SUPER PRIZE',
+    slogan:'10 дней. 10 шансов. 1 большой финал!' },
+];
+
+const FINAL_SCHEDULE = [
+  { time:'10:00', event:'Открытие финального дня' },
+  { time:'11:00', event:'Активности для клиентов' },
+  { time:'12:00', event:'Розыгрыш подарка №1' },
+  { time:'13:00', event:'Розыгрыш подарка №2' },
+  { time:'14:00', event:'Розыгрыш подарка №3' },
+  { time:'15:00', event:'Главный розыгрыш' },
+];
+
+// ========================= УТИЛИТЫ =========================
+const DAY_MS = 86400000;
+// «сейчас» — реальное время устройства; window.__NOW__ используется только для отладки/скринов
+function getNow(){ return window.__NOW__ != null ? new Date(window.__NOW__) : new Date(); }
+
+// номер дня 1..10 от абсолютного мгновения START (устойчиво к ЧП монитора)
+function dayNumber(now){
+  return Math.min(10, Math.max(1, Math.floor((now - START) / DAY_MS) + 1));
+}
+// мгновение пункта расписания финала: арифметика от FINAL (15:00) — без привязки к ЧП устройства
+function scheduleInstant(t){
+  const [h,m] = t.split(':').map(Number);
+  return new Date(FINAL.getTime() + ((h*60 + m) - 15*60) * 60000);
+}
+
+function svgGift(){
+  return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8"/>
+    <rect x="2.5" y="7.5" width="19" height="4.5" rx="1"/>
+    <path d="M12 7.5V21"/>
+    <path d="M12 7.5C10.5 7.5 7.5 7 7.5 4.8 7.5 3.5 8.6 3 9.4 3 11.2 3 12 7.5 12 7.5z"/>
+    <path d="M12 7.5C13.5 7.5 16.5 7 16.5 4.8 16.5 3.5 15.4 3 14.6 3 12.8 3 12 7.5 12 7.5z"/>
+  </svg>`;
+}
+
+function svgBolt(){
+  return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>`;
+}
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+function diffParts(ms){
+  ms = Math.max(0, ms);
+  const d = Math.floor(ms / DAY_MS);
+  const h = Math.floor((ms % DAY_MS) / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return { d, h, m, s };
+}
+function countdownHTML(cap){
+  return `
+    <div>
+      <div class="cd-cap">${cap}</div>
+      <div class="countdown">
+        <div class="cd-unit"><div class="cd-num" id="cdD">00</div><div class="cd-lbl">дней</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><div class="cd-num" id="cdH">00</div><div class="cd-lbl">часов</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><div class="cd-num" id="cdM">00</div><div class="cd-lbl">минут</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><div class="cd-num" id="cdS">00</div><div class="cd-lbl">секунд</div></div>
+      </div>
+    </div>`;
+}
+function lenteHTML(activeDay, allDone){
+  let segs = '', nums = '';
+  for(let i=1;i<=10;i++){
+    let cls = '';
+    if(allDone) cls = 'done';
+    else if(i < activeDay) cls = 'done';
+    else if(i === activeDay) cls = 'today';
+    segs += `<div class="seg ${cls}"></div>`;
+    nums += `<span class="${(!allDone && i===activeDay)?'on':''}">${i}</span>`;
+  }
+  return `<div class="lente-wrap"><div class="lente">${segs}</div><div class="lente-nums">${nums}</div></div>`;
+}
+
+// ========================= СОСТОЯНИЯ =========================
+function computeState(now){
+  if(now < START) return { state:'A', day:0 };
+  if(now >= FINAL) return { state:'D', day:10 };
+  const day = dayNumber(now);
+  if(day >= 10) return { state:'C', day:10 };  // финальный календарный день до 15:00
+  return { state:'B', day };
+}
+
+let lastKey = '';
+
+function renderStage(state, day){
+  const stage = document.getElementById('stage');
+  if(state === 'A'){
+    stage.innerHTML = `
+      <div class="eyebrow">День клиента — 10 дней в PRO MEBEL</div>
+      <div class="headline">АКЦИЯ<br>НАЧНЁТСЯ ЧЕРЕЗ</div>
+      ${countdownHTML('до старта акции')}
+      ${lenteHTML(0,false)}
+      <div class="subtitle">10 дней подарков и розыгрышей. Старт 20 августа.</div>`;
+  }
+  else if(state === 'B'){
+    const d = DAYS[day-1];
+    stage.innerHTML = `
+      <div class="eyebrow">День клиента — 10 дней в PRO MEBEL</div>
+      <div class="mega">ДЕНЬ <span class="o">${day}</span> <span class="slash">/ 10</span></div>
+      ${lenteHTML(day,false)}
+      <div class="theme">${d.title}</div>
+      <div class="gift">${svgGift()}<div class="g-txt">
+        <div class="g-lbl">Подарок дня</div><div class="g-val">${d.gift}</div></div></div>
+      <div class="slogan">${d.slogan}</div>
+      <div class="tomorrow">${svgBolt()} ФИНАЛ УЖЕ ЗАВТРА</div>
+      ${countdownHTML('до финального SUPER DAY')}`;
+  }
+  else if(state === 'C'){
+    stage.innerHTML = `
+      <div class="eyebrow">День клиента — 10 дней в PRO MEBEL</div>
+      <div class="mega">СЕГОДНЯ <span class="o">SUPER DAY</span></div>
+      ${countdownHTML('до главного розыгрыша')}
+      <div class="tomorrow">${svgBolt()} ФИНАЛ УЖЕ СЕГОДНЯ</div>
+      <div class="schedule" id="schedule"></div>`;
+    renderSchedule();
+  }
+  else { // D
+    stage.innerHTML = `
+      <div class="eyebrow">День клиента — 10 дней в PRO MEBEL</div>
+      <div class="headline">АКЦИЯ ЗАВЕРШЕНА.<br><span class="o">СПАСИБО!</span></div>
+      ${lenteHTML(10,true)}
+      <div class="subtitle">Победители объявлены в шоуруме PRO MEBEL.</div>`;
+  }
+}
+
+function renderSchedule(){
+  const box = document.getElementById('schedule');
+  if(!box) return;
+  const now = getNow();
+  // ближайший предстоящий пункт
+  let nextIdx = FINAL_SCHEDULE.findIndex(x => scheduleInstant(x.time) > now);
+  box.innerHTML = FINAL_SCHEDULE.map((x,i) => {
+    const inst = scheduleInstant(x.time);
+    let cls = '';
+    if(inst <= now) cls = 'past';
+    else if(i === nextIdx) cls = 'next';
+    return `<div class="sch-row ${cls}"><span class="dot"></span><span class="t">${x.time}</span><span class="e">${x.event}</span></div>`;
+  }).join('');
+}
+
+// ========================= ТИК =========================
+function setNum(id, v){ const el = document.getElementById(id); if(el) el.textContent = pad2(v); }
+
+function tick(){
+  const now = getNow();
+  const { state, day } = computeState(now);
+
+  // акцент: последние 24 часа до финала (в режимах B и C)
+  const urgent = (state === 'B' || state === 'C') && (FINAL - now) <= DAY_MS && now < FINAL;
+  document.documentElement.classList.toggle('urgent', urgent);
+
+  // хедер-пилюля/футер по состоянию
+  const pill = document.getElementById('headPill');
+  const footR = document.getElementById('footR');
+  if(pill) pill.textContent = (state === 'C') ? 'Финальный день · SUPER DAY'
+                         : (state === 'D') ? 'Акция завершена'
+                         : 'День клиента · 10 дней';
+  if(footR) footR.textContent = '20–29 августа · ' + TZ_LABEL;
+
+  const key = state + ':' + day;
+  if(key !== lastKey){ renderStage(state, day); lastKey = key; }
+
+  // цель отсчёта
+  let target = null;
+  if(state === 'A') target = START;
+  else if(state === 'B' || state === 'C') target = FINAL;
+
+  if(target){
+    const p = diffParts(target - now);
+    setNum('cdD', p.d); setNum('cdH', p.h); setNum('cdM', p.m); setNum('cdS', p.s);
+  }
+
+  // плашка «финал уже завтра/сегодня»
+  const tm = document.querySelector('.tomorrow');
+  if(tm) tm.classList.toggle('show', urgent);
+
+  // подсветка ближайшего пункта расписания (режим C)
+  if(state === 'C') renderSchedule();
+}
+
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
