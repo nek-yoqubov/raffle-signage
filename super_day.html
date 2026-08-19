@@ -4,17 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>День клиента — 10 дней в PRO MEBEL</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
 :root{
-  --bg:#f3efe8; --bg2:#eae4d9; --panel:#fff;
-  --ink:#1c1712; --ink-2:#4a4238; --muted:#948a79; --line:#e2dacb;
-  --orange:#ef7d1a; --orange-d:#d9600a; --gold:#caa24a; --dark:#16130f;
-  --accent:var(--orange);        /* акцент по умолчанию — оранжевый */
+  --bg:#efe6d6; --bg2:#e6dbc6; --panel:#fff;
+  --ink:#1c1712; --ink-2:#4a4238; --muted:#948a79; --line:#ddd0b8;
+  --orange:#FF7A00; --orange-d:#cc5f00; --gold:#caa24a; --dark:#16130f;
+  --accent:var(--orange);        /* акцент по умолчанию — оранжевый #FF7A00 */
   --accent-d:var(--orange-d);
   --shadow:0 10px 30px rgba(40,28,10,.10);
+  --display:'Impact','Oswald','Arial Narrow Bold',system-ui,sans-serif;
 }
 /* последние 24 часа — акцент в тревожный красный */
 :root.urgent{ --accent:#e0342a; --accent-d:#b81f16; }
@@ -30,22 +33,36 @@ html,body{
 .screen{
   position:relative; width:100vw; height:100vh;
   display:flex; flex-direction:column;
-  background:radial-gradient(120% 60% at 50% -10%, #fbf7f0 0%, var(--bg) 55%), var(--bg);
+  background:var(--bg);
 }
+/* ===== ФОН ЛДСП — подставь своё фото ldsp.jpg рядом с этим файлом ===== */
+/* Если фото нет — останется тёплый бежевый фон, страница не ломается. */
+.screen::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-color:var(--bg);
+  background-image:
+    /* лёгкая подсветка сверху, чтобы шапка/заголовок читались */
+    radial-gradient(120% 55% at 50% -12%, rgba(255,251,244,.55) 0%, rgba(255,251,244,0) 55%),
+    url('ldsp.png');
+  background-size:cover, cover;
+  background-position:center, center;
+  background-repeat:no-repeat, no-repeat;
+}
+.screen > *{ position:relative; z-index:1; }
 
-/* ===== HEADER (как у табло) ===== */
-.header{
-  flex-shrink:0; background:var(--panel);
-  padding:clamp(10px,1.6vh,20px) clamp(18px,3.4vw,40px);
-  display:flex; align-items:center; justify-content:space-between;
-  border-bottom:4px solid var(--accent);
-  box-shadow:0 6px 18px rgba(40,28,10,.06);
-  transition:border-color .5s ease;
+/* ===== TOP BRAND (логотип крупно по центру сверху) ===== */
+.topbrand{
+  flex-shrink:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(10px,1.6vh,18px);
+  padding:clamp(20px,4vh,52px) clamp(20px,4vw,60px) clamp(8px,1.4vh,16px);
 }
+.topbrand img{ height:clamp(64px,9vh,120px); width:auto; display:block;
+  filter:drop-shadow(0 3px 10px rgba(40,28,10,.18)); }
 .brand{ display:flex; align-items:center; gap:16px; }
 .brand img{ height:clamp(38px,5.2vh,62px); width:auto; display:block; }
 .brand-fallback{ display:none; align-items:center; gap:12px;
-  font-family:'Bebas Neue',sans-serif; letter-spacing:.06em; }
+  font-family:var(--display); letter-spacing:.06em; }
 .brand-hex{ width:40px; height:44px; background:var(--orange);
   clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
   display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.5rem; }
@@ -54,7 +71,7 @@ html,body{
 
 .head-pill{
   display:flex; align-items:center; gap:9px;
-  background:rgba(239,125,26,.1); border:1px solid rgba(239,125,26,.35);
+  background:rgba(255,122,0,.1); border:1px solid rgba(255,122,0,.35);
   color:var(--accent-d); border-radius:100px;
   padding:8px 16px; font-size:clamp(.56rem,1vw,.72rem);
   letter-spacing:.14em; text-transform:uppercase; font-weight:700; white-space:nowrap;
@@ -62,8 +79,8 @@ html,body{
 .head-dot{ width:8px; height:8px; border-radius:50%; background:var(--accent);
   animation:pulse 1.7s ease-in-out infinite; }
 @keyframes pulse{
-  0%,100%{ opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(239,125,26,.5); }
-  50%{ opacity:.55; transform:scale(1.35); box-shadow:0 0 0 6px rgba(239,125,26,0); }
+  0%,100%{ opacity:1; transform:scale(1); box-shadow:0 0 0 0 rgba(255,122,0,.5); }
+  50%{ opacity:.55; transform:scale(1.35); box-shadow:0 0 0 6px rgba(255,122,0,0); }
 }
 
 /* ===== STAGE ===== */
@@ -76,27 +93,28 @@ html,body{
 }
 
 .eyebrow{
-  font-size:clamp(.66rem,1.5vw,1rem); letter-spacing:.2em; text-transform:uppercase;
+  font-size:clamp(.9rem,1.9vw,1.5rem); letter-spacing:.2em; text-transform:uppercase;
   color:var(--accent-d); font-weight:800;
 }
 
 /* headline / day number */
 .mega{
-  font-family:'Bebas Neue',sans-serif;
-  line-height:.9; letter-spacing:.02em; color:var(--ink);
+  font-family:var(--display);
+  line-height:1; letter-spacing:.02em; color:var(--ink);
   font-size:clamp(3rem,12.5vw,10rem);
 }
 .mega .o{ color:var(--accent); }
 .mega .slash{ color:var(--muted); font-size:.55em; }
 
 .headline{
-  font-family:'Bebas Neue',sans-serif; letter-spacing:.03em; line-height:.95; color:var(--ink);
-  font-size:clamp(2.2rem,7.5vw,5.5rem);
+  font-family:var(--display); letter-spacing:.03em; line-height:1.12; color:var(--ink);
+  font-size:clamp(2.6rem,8vw,6.2rem);
+  text-wrap:balance;
 }
 .headline .o{ color:var(--accent); }
 
 .subtitle{
-  font-size:clamp(1rem,2.4vw,1.7rem); color:var(--ink-2); font-weight:600;
+  font-size:clamp(1.3rem,3vw,2.4rem); color:var(--ink-2); font-weight:600;
   max-width:22ch;
 }
 
@@ -106,12 +124,15 @@ html,body{
   display:flex; gap:clamp(4px,.9vw,9px); width:100%;
 }
 .seg{
-  flex:1 1 0; height:clamp(9px,1.5vh,16px); border-radius:100px;
-  background:var(--line); position:relative;
-  transition:background .4s ease;
+  flex:1 1 0; height:clamp(16px,2.4vh,28px); border-radius:100px;
+  background:#ffffff; position:relative;
+  border:1px solid rgba(120,86,42,.18);
+  box-shadow:0 2px 6px rgba(40,28,10,.12), inset 0 1px 0 rgba(255,255,255,.9);
+  transition:background .4s ease, box-shadow .4s ease;
 }
-.seg.done{ background:var(--accent); }
-.seg.today{ background:var(--accent);
+.seg.done{ background:var(--accent); border-color:transparent;
+  box-shadow:0 3px 8px rgba(255,122,0,.35); }
+.seg.today{ background:var(--accent); border-color:transparent;
   box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
   animation:segPulse 1.6s ease-in-out infinite; }
 @keyframes segPulse{
@@ -119,62 +140,63 @@ html,body{
   50%{ box-shadow:0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent); }
 }
 .lente-nums{
-  display:flex; gap:clamp(4px,.9vw,9px); width:100%; margin-top:8px;
+  display:flex; gap:clamp(4px,.9vw,9px); width:100%; margin-top:12px;
 }
 .lente-nums span{
-  flex:1 1 0; text-align:center; font-size:clamp(.5rem,1vw,.72rem);
-  color:var(--muted); font-weight:700; font-variant-numeric:tabular-nums;
+  flex:1 1 0; text-align:center; font-size:clamp(.8rem,1.7vw,1.2rem);
+  color:var(--ink-2); font-weight:800; font-variant-numeric:tabular-nums;
 }
 .lente-nums span.on{ color:var(--accent-d); }
+.lente-nums span.done{ color:var(--accent-d); }
 
 /* ===== THEME OF DAY ===== */
 .theme{
-  font-family:'Bebas Neue',sans-serif; letter-spacing:.02em; line-height:1;
-  font-size:clamp(1.8rem,5.6vw,4rem); color:var(--ink);
+  font-family:var(--display); letter-spacing:.02em; line-height:1.08;
+  font-size:clamp(2.4rem,7vw,5.5rem); color:var(--ink); text-wrap:balance;
 }
 
 /* gift row */
 .gift{
   display:inline-flex; align-items:center; gap:14px;
   background:linear-gradient(180deg,#fff4e6,#ffe9cf);
-  border:1px solid rgba(239,125,26,.35); border-radius:16px;
+  border:1px solid rgba(255,122,0,.35); border-radius:16px;
   padding:clamp(10px,1.6vh,16px) clamp(16px,2.4vw,26px);
   box-shadow:var(--shadow); max-width:min(90vw,820px);
 }
 .gift .ic{
-  flex-shrink:0; width:clamp(30px,3.6vw,44px); height:clamp(30px,3.6vw,44px);
+  flex-shrink:0; width:clamp(40px,4.6vw,64px); height:clamp(40px,4.6vw,64px);
   color:var(--accent-d);
 }
 .gift .g-txt{ text-align:left; }
-.gift .g-lbl{ font-size:clamp(.54rem,1vw,.68rem); letter-spacing:.16em;
+.gift .g-lbl{ font-size:clamp(.72rem,1.3vw,1rem); letter-spacing:.16em;
   text-transform:uppercase; color:var(--muted); font-weight:800; }
-.gift .g-val{ font-size:clamp(1rem,2.3vw,1.5rem); color:var(--ink); font-weight:700; line-height:1.15; }
+.gift .g-val{ font-size:clamp(1.4rem,3vw,2.2rem); color:var(--ink); font-weight:700; line-height:1.15; }
 
-.slogan{ font-size:clamp(1rem,2.3vw,1.55rem); color:var(--ink-2); font-weight:600; font-style:italic;
+.slogan{ font-size:clamp(1.4rem,3vw,2.3rem); color:var(--ink-2); font-weight:600; font-style:italic;
   max-width:26ch; }
 
 /* ===== COUNTDOWN ===== */
-.cd-cap{ font-size:clamp(.66rem,1.4vw,.95rem); letter-spacing:.18em; text-transform:uppercase;
+.cd-cap{ font-size:clamp(.95rem,1.8vw,1.5rem); letter-spacing:.18em; text-transform:uppercase;
   color:var(--muted); font-weight:800; margin-bottom:2px; }
 .countdown{ display:flex; align-items:flex-start; gap:clamp(8px,1.6vw,18px); }
 .cd-unit{ display:flex; flex-direction:column; align-items:center; }
 .cd-num{
-  font-family:'Bebas Neue',sans-serif; line-height:.9; color:var(--ink);
-  font-size:clamp(2.4rem,9.5vw,6.5rem);
+  font-family:var(--display); line-height:.9; color:var(--ink);
+  font-size:clamp(3rem,11vw,8.5rem);
   font-variant-numeric:tabular-nums;
   min-width:1.7ch; text-align:center;
 }
 .urgent .cd-num{ color:var(--accent-d); animation:numPulse 1s ease-in-out infinite; }
 @keyframes numPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
-.cd-lbl{ font-size:clamp(.5rem,1vw,.72rem); letter-spacing:.14em; text-transform:uppercase;
+.cd-lbl{ font-size:clamp(.78rem,1.5vw,1.15rem); letter-spacing:.14em; text-transform:uppercase;
   color:var(--muted); font-weight:700; margin-top:4px; }
-.cd-sep{ font-family:'Bebas Neue',sans-serif; color:var(--accent);
-  font-size:clamp(2rem,7vw,5rem); line-height:.9; margin-top:.02em; }
+.cd-sep{ font-family:var(--display); color:var(--accent);
+  font-size:clamp(2.6rem,8.5vw,7rem); line-height:.9; margin-top:.02em; }
 
 /* tomorrow badge */
 .tomorrow{
   display:none; align-items:center; gap:10px;
-  background:var(--accent); color:#fff; font-family:'Bebas Neue',sans-serif;
+  background:var(--accent); color:#fff; font-family:var(--display);
   letter-spacing:.06em; font-size:clamp(1.1rem,2.6vw,1.8rem);
   padding:clamp(8px,1.4vh,14px) clamp(18px,3vw,30px); border-radius:100px;
   box-shadow:0 10px 30px rgba(224,52,42,.35);
@@ -189,12 +211,12 @@ html,body{
   padding:clamp(9px,1.4vh,15px) clamp(14px,2vw,22px);
   box-shadow:0 4px 14px rgba(40,28,10,.05);
 }
-.sch-row .t{ font-family:'Bebas Neue',sans-serif; font-size:clamp(1.3rem,3vw,2rem);
+.sch-row .t{ font-family:var(--display); font-size:clamp(1.7rem,3.6vw,2.6rem);
   color:var(--ink); min-width:3.4ch; font-variant-numeric:tabular-nums; }
-.sch-row .e{ flex:1; text-align:left; font-size:clamp(.95rem,2vw,1.3rem);
+.sch-row .e{ flex:1; text-align:left; font-size:clamp(1.2rem,2.5vw,1.8rem);
   color:var(--ink-2); font-weight:600; }
 .sch-row.next{ border-color:var(--accent); background:linear-gradient(180deg,#fff6ec,#fff);
-  box-shadow:0 8px 22px rgba(239,125,26,.16); }
+  box-shadow:0 8px 22px rgba(255,122,0,.16); }
 .sch-row.next .t{ color:var(--accent-d); }
 .sch-row.past{ opacity:.45; }
 .sch-row .dot{ width:9px; height:9px; border-radius:50%; background:var(--line); flex-shrink:0; }
@@ -208,7 +230,7 @@ html,body{
   display:flex; align-items:center; justify-content:space-between; gap:16px;
   border-top:4px solid var(--accent); transition:border-color .5s ease;
 }
-.footer .f-l{ font-family:'Bebas Neue',sans-serif; letter-spacing:.08em;
+.footer .f-l{ font-family:var(--display); letter-spacing:.08em;
   font-size:clamp(.9rem,2vw,1.4rem); }
 .footer .f-l b{ color:var(--orange); }
 .footer .f-r{ font-size:clamp(.56rem,1.1vw,.74rem); letter-spacing:.12em;
@@ -226,14 +248,12 @@ html,body{
 <body>
 <div class="screen" id="screen">
 
-  <div class="header">
-    <div class="brand">
-      <img id="logo" src="logo_promebel.png" alt="PRO MEBEL"
-           onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
-      <div class="brand-fallback" id="logoFallback">
-        <div class="brand-hex">P</div>
-        <div class="brand-name">PRO<b>MEBEL</b></div>
-      </div>
+  <div class="topbrand">
+    <img id="logo" src="logo_promebel.png" alt="PRO MEBEL"
+         onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
+    <div class="brand-fallback" id="logoFallback">
+      <div class="brand-hex">P</div>
+      <div class="brand-name">PRO<b>MEBEL</b></div>
     </div>
     <div class="head-pill"><span class="head-dot"></span><span id="headPill">День клиента · 10 дней</span></div>
   </div>
@@ -345,8 +365,12 @@ function lenteHTML(activeDay, allDone){
     if(allDone) cls = 'done';
     else if(i < activeDay) cls = 'done';
     else if(i === activeDay) cls = 'today';
+    let numCls = '';
+    if(allDone) numCls = 'done';
+    else if(i < activeDay) numCls = 'done';
+    else if(i === activeDay) numCls = 'on';
     segs += `<div class="seg ${cls}"></div>`;
-    nums += `<span class="${(!allDone && i===activeDay)?'on':''}">${i}</span>`;
+    nums += `<span class="${numCls}">${i}</span>`;
   }
   return `<div class="lente-wrap"><div class="lente">${segs}</div><div class="lente-nums">${nums}</div></div>`;
 }
