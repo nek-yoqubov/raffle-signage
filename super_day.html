@@ -31,7 +31,7 @@ html,body{
 }
 
 .screen{
-  position:relative; width:100vw; height:100vh;
+  position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden;
   display:flex; flex-direction:column;
   background:var(--bg);
 }
@@ -177,6 +177,14 @@ html,body{
 .slogan{ font-size:clamp(1.4rem,3vw,2.3rem); color:var(--ink-2); font-weight:600; font-style:italic;
   max-width:26ch; }
 
+/* плашка условия купона */
+.coupon-rule{ display:inline-flex; align-items:center; gap:12px;
+  background:var(--accent); color:#fff; font-weight:800;
+  font-size:clamp(1.1rem,2.3vw,1.7rem); padding:12px 26px; border-radius:100px;
+  box-shadow:0 8px 22px rgba(255,122,0,.32); line-height:1.1; }
+.coupon-rule b{ font-weight:800; }
+.coupon-rule svg{ width:clamp(24px,2.6vw,34px); height:clamp(24px,2.6vw,34px); flex-shrink:0; }
+
 /* ===== COUNTDOWN ===== */
 .cd-cap{ font-size:clamp(.95rem,1.8vw,1.5rem); letter-spacing:.18em; text-transform:uppercase;
   color:var(--muted); font-weight:800; margin-bottom:2px; }
@@ -269,24 +277,25 @@ html,body{
 
 /* ===== КНИЖНАЯ ОРИЕНТАЦИЯ (вертикальный монитор) ===== */
 @media (orientation: portrait){
-  /* растягиваем контент по всей высоте, чтобы низ не пустовал */
-  .stage{ justify-content:space-evenly; gap:clamp(20px,4vh,60px);
-    padding:clamp(24px,5vh,70px) 5vw clamp(30px,6vh,90px); }
-  .topbrand{ padding:clamp(28px,5vh,64px) 5vw clamp(10px,2vh,22px); }
-  .topbrand img{ height:clamp(80px,10vh,150px); }
-  /* крупнее под большой вертикальный экран */
-  .eyebrow{ font-size:clamp(1.1rem,2.4vw,1.9rem); }
-  .headline{ font-size:clamp(3rem,9vw,7.5rem); }
-  .mega{ font-size:clamp(4rem,15vw,12rem); }
-  .theme{ font-size:clamp(2.6rem,7vw,6rem); }
-  .subtitle{ font-size:clamp(1.5rem,3.6vw,3rem); }
-  .slogan{ font-size:clamp(1.6rem,3.6vw,2.8rem); }
-  .cd-num{ font-size:clamp(3.4rem,13vw,10rem); }
-  .cd-cap{ font-size:clamp(1.1rem,2.2vw,1.8rem); }
-  .cd-lbl{ font-size:clamp(.9rem,1.8vw,1.4rem); }
-  .gift .g-val{ font-size:clamp(1.6rem,3.6vw,2.6rem); }
-  .seg{ height:clamp(20px,2.4vh,34px); }
-  .lente-nums span{ font-size:clamp(1rem,2vw,1.5rem); }
+  /* компактно и предсказуемо: контент прижат кверху, влезает даже с адресной строкой */
+  .stage{ justify-content:flex-start; gap:clamp(14px,2.2vh,30px);
+    padding:clamp(12px,2vh,28px) 5vw clamp(16px,2.4vh,34px); }
+  .topbrand{ padding:clamp(14px,2.2vh,30px) 5vw clamp(6px,1vh,14px); gap:clamp(6px,1vh,12px); }
+  .topbrand img{ height:clamp(64px,7.5vh,110px); }
+  .eyebrow{ font-size:clamp(1rem,2.1vw,1.7rem); }
+  .headline{ font-size:clamp(2.6rem,8vw,6.5rem); }
+  .mega{ font-size:clamp(3.4rem,12.5vw,10rem); }
+  .theme{ font-size:clamp(2.1rem,5.6vw,4.6rem); }
+  .subtitle{ font-size:clamp(1.4rem,3.2vw,2.6rem); }
+  .slogan{ font-size:clamp(1.35rem,3vw,2.3rem); }
+  .coupon-rule{ font-size:clamp(1.15rem,2.5vw,1.9rem); padding:12px 26px; }
+  .cd-num{ font-size:clamp(3rem,11vw,8.5rem); }
+  .cd-cap{ font-size:clamp(1rem,2vw,1.6rem); }
+  .cd-lbl{ font-size:clamp(.85rem,1.7vw,1.3rem); }
+  .gift .g-val{ font-size:clamp(1.4rem,3.2vw,2.3rem); }
+  .gift{ padding:clamp(14px,2vh,22px) clamp(18px,3vw,30px); }
+  .seg{ height:clamp(16px,2vh,28px); }
+  .lente-nums span{ font-size:clamp(.9rem,1.8vw,1.4rem); }
 }
 </style>
 </head>
@@ -315,6 +324,8 @@ html,body{
 // ========================= КОНФИГ =========================
 const START = new Date('2026-08-20T00:00:00+05:00'); // День 1, старт акции
 const FINAL = new Date('2026-08-29T15:00:00+05:00'); // День 10, главный розыгрыш
+const DAILY_DRAW_HOUR = 18;   // час дневного розыгрыша (18:00)
+const DAILY_DRAW_MIN  = 0;
 const TZ_LABEL = 'Худжанд';
 
 const DAYS = [
@@ -363,6 +374,12 @@ function scheduleInstant(t){
   const [h,m] = t.split(':').map(Number);
   return new Date(FINAL.getTime() + ((h*60 + m) - 15*60) * 60000);
 }
+// мгновение сегодняшнего дневного розыгрыша (18:00) — арифметика от START (00:00 дня 1)
+function todayDrawInstant(now){
+  const d = dayNumber(now);                 // 1..10
+  const dayStart = START.getTime() + (d-1) * DAY_MS;  // 00:00 текущего дня акции
+  return new Date(dayStart + (DAILY_DRAW_HOUR*60 + DAILY_DRAW_MIN) * 60000);
+}
 
 function svgGift(){
   return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -377,6 +394,13 @@ function svgGift(){
 
 function svgBolt(){
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>`;
+}
+function svgTicket(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M3 8.5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2 2 0 0 0 0-4z"/>
+    <path d="M14 6.5v11" stroke-dasharray="2 2"/>
+  </svg>`;
 }
 
 function pad2(n){ return String(n).padStart(2,'0'); }
@@ -451,8 +475,9 @@ function renderStage(state, day){
       <div class="gift">${svgGift()}<div class="g-txt">
         <div class="g-lbl">Подарок дня</div><div class="g-val">${d.gift}</div></div></div>
       <div class="slogan">${d.slogan}</div>
+      <div class="coupon-rule">${svgTicket()} Покупка от <b>3000 сомони</b> = <b>1 купон</b> в розыгрыш</div>
       <div class="tomorrow">${svgBolt()} ФИНАЛ УЖЕ ЗАВТРА</div>
-      ${countdownHTML('до финального SUPER DAY')}`;
+      ${countdownHTML('<span id="cdCap">до розыгрыша сегодня в 18:00</span>')}`;
   }
   else if(state === 'C'){
     stage.innerHTML = `
@@ -512,7 +537,25 @@ function tick(){
   // цель отсчёта
   let target = null;
   if(state === 'A') target = START;
-  else if(state === 'B' || state === 'C') target = FINAL;
+  else if(state === 'C') target = FINAL;
+  else if(state === 'B'){
+    // считаем до сегодняшнего розыгрыша 18:00; если он прошёл — до завтрашнего (или до финала в день 10)
+    const todayDraw = todayDrawInstant(now);
+    const cap = document.getElementById('cdCap');
+    if(now < todayDraw){
+      target = todayDraw;
+      if(cap) cap.textContent = 'до розыгрыша сегодня в 18:00';
+    } else {
+      // розыгрыш дня прошёл
+      if(day >= 10){
+        target = FINAL;
+        if(cap) cap.textContent = 'до финального SUPER DAY';
+      } else {
+        target = new Date(todayDraw.getTime() + DAY_MS); // завтра 18:00
+        if(cap) cap.textContent = 'до розыгрыша завтра в 18:00';
+      }
+    }
+  }
 
   if(target){
     const p = diffParts(target - now);
