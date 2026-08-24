@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>День клиента — 10 дней в PRO MEBEL</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
 :root{
-  --bg:#efe6d6; --bg2:#e6dbc6; --panel:#fff;
-  --ink:#1c1712; --ink-2:#4a4238; --muted:#948a79; --line:#ddd0b8;
+  --bg:#f3efe8; --bg2:#eae4d9; --panel:#fff;
+  --ink:#1c1712; --ink-2:#4a4238; --muted:#948a79; --line:#e2dacb;
   --orange:#FF7A00; --orange-d:#cc5f00; --gold:#caa24a; --dark:#16130f;
-  --accent:var(--orange);        /* акцент по умолчанию — оранжевый #FF7A00 */
+  --accent:var(--orange);        /* акцент по умолчанию — оранжевый */
   --accent-d:var(--orange-d);
   --shadow:0 10px 30px rgba(40,28,10,.10);
-  --display:'Impact','Oswald','Arial Narrow Bold',system-ui,sans-serif;
+  /* плакатный шрифт: Impact где есть (Windows/Mac), иначе Oswald (с кириллицей) */
+  --display:'Impact','Oswald','PT Sans Narrow','Arial Narrow',sans-serif;
+  --board:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0NjAnIGhlaWdodD0nNDYwJz48ZGVmcz48ZmlsdGVyIGlkPSdnJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC4wMTQgMC4xMycgbnVtT2N0YXZlcz0nNCcgc2VlZD0nNycgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjxmZUNvbG9yTWF0cml4IHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAuMzUgMCAwIDAgMCAwLjIzIDAgMCAwIDAgMC4xMCAwIDAgMCAwLjE1IDAnLz48L2ZpbHRlcj48ZmlsdGVyIGlkPSdmJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc2VlZD0nMTEnIHN0aXRjaFRpbGVzPSdzdGl0Y2gnLz48ZmVDb2xvck1hdHJpeCB0eXBlPSdtYXRyaXgnIHZhbHVlcz0nMCAwIDAgMCAwLjMwIDAgMCAwIDAgMC4xOSAwIDAgMCAwIDAuMDkgMCAwIDAgMC4xMCAwJy8+PC9maWx0ZXI+PC9kZWZzPjxyZWN0IHdpZHRoPSc0NjAnIGhlaWdodD0nNDYwJyBmaWx0ZXI9J3VybCgjZyknLz48cmVjdCB3aWR0aD0nNDYwJyBoZWlnaHQ9JzQ2MCcgZmlsdGVyPSd1cmwoI2YpJy8+PC9zdmc+");
 }
 /* последние 24 часа — акцент в тревожный красный */
 :root.urgent{ --accent:#e0342a; --accent-d:#b81f16; }
@@ -31,36 +31,27 @@ html,body{
 }
 
 .screen{
-  position:relative; width:100vw; height:100vh; height:100dvh; overflow:hidden;
+  position:relative; width:100vw; height:100vh;
   display:flex; flex-direction:column;
-  background:var(--bg);
+  background:
+    radial-gradient(120% 55% at 50% -8%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 55%),
+    var(--board),
+    linear-gradient(180deg, #f1e8d8 0%, #ece2d0 100%);
+  background-repeat:no-repeat, repeat, no-repeat;
+  background-size:100% 100%, 460px 460px, 100% 100%;
 }
-/* ===== ФОН ЛДСП — подставь своё фото ldsp.png рядом с этим файлом ===== */
-/* Если фото нет — останется тёплый бежевый фон, страница не ломается. */
-.screen::before{
-  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
-  background-color:var(--bg);
-  background-image:
-    /* светлая вуаль: приглушает дерево, чтобы текст читался поверх */
-    linear-gradient(rgba(247,241,231,.32), rgba(247,241,231,.32)),
-    /* подсветка сверху под логотип/заголовок */
-    radial-gradient(120% 55% at 50% -12%, rgba(255,251,244,.5) 0%, rgba(255,251,244,0) 55%),
-    url('ldsp.png');
-  background-size:cover, cover, cover;
-  background-position:center, center, center;
-  background-repeat:no-repeat, no-repeat, no-repeat;
-}
-.screen > *{ position:relative; z-index:1; }
 
-/* ===== TOP BRAND (логотип крупно по центру сверху) ===== */
-.topbrand{
-  flex-shrink:0;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:clamp(10px,1.6vh,18px);
-  padding:clamp(20px,4vh,52px) clamp(20px,4vw,60px) clamp(8px,1.4vh,16px);
+.brand-name,.mega,.headline,.theme,.cd-num,.cd-sep,.sch-row .t,.tomorrow,.footer .f-l{ font-weight:700; letter-spacing:.01em; }
+
+/* ===== HEADER (как у табло) ===== */
+.header{
+  flex-shrink:0; background:var(--panel);
+  padding:clamp(10px,1.6vh,20px) clamp(18px,3.4vw,40px);
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:4px solid var(--accent);
+  box-shadow:0 6px 18px rgba(40,28,10,.06);
+  transition:border-color .5s ease;
 }
-.topbrand img{ height:clamp(64px,9vh,120px); width:auto; display:block;
-  filter:drop-shadow(0 3px 10px rgba(40,28,10,.18)); }
 .brand{ display:flex; align-items:center; gap:16px; }
 .brand img{ height:clamp(38px,5.2vh,62px); width:auto; display:block; }
 .brand-fallback{ display:none; align-items:center; gap:12px;
@@ -95,28 +86,27 @@ html,body{
 }
 
 .eyebrow{
-  font-size:clamp(.9rem,1.9vw,1.5rem); letter-spacing:.2em; text-transform:uppercase;
+  font-size:clamp(.66rem,1.5vw,1rem); letter-spacing:.2em; text-transform:uppercase;
   color:var(--accent-d); font-weight:800;
 }
 
 /* headline / day number */
 .mega{
   font-family:var(--display);
-  line-height:1; letter-spacing:.02em; color:var(--ink);
+  line-height:.9; letter-spacing:.02em; color:var(--ink);
   font-size:clamp(3rem,12.5vw,10rem);
 }
 .mega .o{ color:var(--accent); }
 .mega .slash{ color:var(--muted); font-size:.55em; }
 
 .headline{
-  font-family:var(--display); letter-spacing:.03em; line-height:1.12; color:var(--ink);
-  font-size:clamp(2.6rem,8vw,6.2rem);
-  text-wrap:balance;
+  font-family:var(--display); letter-spacing:.03em; line-height:.95; color:var(--ink);
+  font-size:clamp(2.2rem,7.5vw,5.5rem);
 }
 .headline .o{ color:var(--accent); }
 
 .subtitle{
-  font-size:clamp(1.3rem,3vw,2.4rem); color:var(--ink-2); font-weight:600;
+  font-size:clamp(1rem,2.4vw,1.7rem); color:var(--ink-2); font-weight:600;
   max-width:22ch;
 }
 
@@ -126,15 +116,12 @@ html,body{
   display:flex; gap:clamp(4px,.9vw,9px); width:100%;
 }
 .seg{
-  flex:1 1 0; height:clamp(16px,2.4vh,28px); border-radius:100px;
-  background:#ffffff; position:relative;
-  border:1px solid rgba(120,86,42,.18);
-  box-shadow:0 2px 6px rgba(40,28,10,.12), inset 0 1px 0 rgba(255,255,255,.9);
-  transition:background .4s ease, box-shadow .4s ease;
+  flex:1 1 0; height:clamp(9px,1.5vh,16px); border-radius:100px;
+  background:var(--line); position:relative;
+  transition:background .4s ease;
 }
-.seg.done{ background:var(--accent); border-color:transparent;
-  box-shadow:0 3px 8px rgba(255,122,0,.35); }
-.seg.today{ background:var(--accent); border-color:transparent;
+.seg.done{ background:var(--accent); }
+.seg.today{ background:var(--accent);
   box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent);
   animation:segPulse 1.6s ease-in-out infinite; }
 @keyframes segPulse{
@@ -142,19 +129,18 @@ html,body{
   50%{ box-shadow:0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent); }
 }
 .lente-nums{
-  display:flex; gap:clamp(4px,.9vw,9px); width:100%; margin-top:12px;
+  display:flex; gap:clamp(4px,.9vw,9px); width:100%; margin-top:8px;
 }
 .lente-nums span{
-  flex:1 1 0; text-align:center; font-size:clamp(.8rem,1.7vw,1.2rem);
-  color:var(--ink-2); font-weight:800; font-variant-numeric:tabular-nums;
+  flex:1 1 0; text-align:center; font-size:clamp(.5rem,1vw,.72rem);
+  color:var(--muted); font-weight:700; font-variant-numeric:tabular-nums;
 }
 .lente-nums span.on{ color:var(--accent-d); }
-.lente-nums span.done{ color:var(--accent-d); }
 
 /* ===== THEME OF DAY ===== */
 .theme{
-  font-family:var(--display); letter-spacing:.02em; line-height:1.08;
-  font-size:clamp(2.4rem,7vw,5.5rem); color:var(--ink); text-wrap:balance;
+  font-family:var(--display); letter-spacing:.02em; line-height:1;
+  font-size:clamp(1.8rem,5.6vw,4rem); color:var(--ink);
 }
 
 /* gift row */
@@ -166,42 +152,34 @@ html,body{
   box-shadow:var(--shadow); max-width:min(90vw,820px);
 }
 .gift .ic{
-  flex-shrink:0; width:clamp(40px,4.6vw,64px); height:clamp(40px,4.6vw,64px);
+  flex-shrink:0; width:clamp(30px,3.6vw,44px); height:clamp(30px,3.6vw,44px);
   color:var(--accent-d);
 }
 .gift .g-txt{ text-align:left; }
-.gift .g-lbl{ font-size:clamp(.72rem,1.3vw,1rem); letter-spacing:.16em;
+.gift .g-lbl{ font-size:clamp(.54rem,1vw,.68rem); letter-spacing:.16em;
   text-transform:uppercase; color:var(--muted); font-weight:800; }
-.gift .g-val{ font-size:clamp(1.4rem,3vw,2.2rem); color:var(--ink); font-weight:700; line-height:1.15; }
+.gift .g-val{ font-size:clamp(1rem,2.3vw,1.5rem); color:var(--ink); font-weight:700; line-height:1.15; }
 
-.slogan{ font-size:clamp(1.4rem,3vw,2.3rem); color:var(--ink-2); font-weight:600; font-style:italic;
+.slogan{ font-size:clamp(1rem,2.3vw,1.55rem); color:var(--ink-2); font-weight:600; font-style:italic;
   max-width:26ch; }
 
-/* плашка условия купона */
-.coupon-rule{ display:inline-flex; align-items:center; gap:12px;
-  background:var(--accent); color:#fff; font-weight:800;
-  font-size:clamp(1.1rem,2.3vw,1.7rem); padding:12px 26px; border-radius:100px;
-  box-shadow:0 8px 22px rgba(255,122,0,.32); line-height:1.1; }
-.coupon-rule b{ font-weight:800; }
-.coupon-rule svg{ width:clamp(24px,2.6vw,34px); height:clamp(24px,2.6vw,34px); flex-shrink:0; }
-
 /* ===== COUNTDOWN ===== */
-.cd-cap{ font-size:clamp(.95rem,1.8vw,1.5rem); letter-spacing:.18em; text-transform:uppercase;
+.cd-cap{ font-size:clamp(.66rem,1.4vw,.95rem); letter-spacing:.18em; text-transform:uppercase;
   color:var(--muted); font-weight:800; margin-bottom:2px; }
 .countdown{ display:flex; align-items:flex-start; gap:clamp(8px,1.6vw,18px); }
 .cd-unit{ display:flex; flex-direction:column; align-items:center; }
 .cd-num{
   font-family:var(--display); line-height:.9; color:var(--ink);
-  font-size:clamp(3rem,11vw,8.5rem);
+  font-size:clamp(2.4rem,9.5vw,6.5rem);
   font-variant-numeric:tabular-nums;
   min-width:1.7ch; text-align:center;
 }
 .urgent .cd-num{ color:var(--accent-d); animation:numPulse 1s ease-in-out infinite; }
 @keyframes numPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
-.cd-lbl{ font-size:clamp(.78rem,1.5vw,1.15rem); letter-spacing:.14em; text-transform:uppercase;
+.cd-lbl{ font-size:clamp(.5rem,1vw,.72rem); letter-spacing:.14em; text-transform:uppercase;
   color:var(--muted); font-weight:700; margin-top:4px; }
 .cd-sep{ font-family:var(--display); color:var(--accent);
-  font-size:clamp(2.6rem,8.5vw,7rem); line-height:.9; margin-top:.02em; }
+  font-size:clamp(2rem,7vw,5rem); line-height:.9; margin-top:.02em; }
 
 /* tomorrow badge */
 .tomorrow{
@@ -221,9 +199,9 @@ html,body{
   padding:clamp(9px,1.4vh,15px) clamp(14px,2vw,22px);
   box-shadow:0 4px 14px rgba(40,28,10,.05);
 }
-.sch-row .t{ font-family:var(--display); font-size:clamp(1.7rem,3.6vw,2.6rem);
+.sch-row .t{ font-family:var(--display); font-size:clamp(1.3rem,3vw,2rem);
   color:var(--ink); min-width:3.4ch; font-variant-numeric:tabular-nums; }
-.sch-row .e{ flex:1; text-align:left; font-size:clamp(1.2rem,2.5vw,1.8rem);
+.sch-row .e{ flex:1; text-align:left; font-size:clamp(.95rem,2vw,1.3rem);
   color:var(--ink-2); font-weight:600; }
 .sch-row.next{ border-color:var(--accent); background:linear-gradient(180deg,#fff6ec,#fff);
   box-shadow:0 8px 22px rgba(255,122,0,.16); }
@@ -253,61 +231,19 @@ html,body{
 @media (prefers-reduced-motion: reduce){
   .head-dot,.seg.today,.urgent .cd-num,.sch-row.next .dot{ animation:none !important; }
 }
-
-/* ===== КОНТРАСТ НА ФОНЕ ДЕРЕВА ===== */
-/* крупный текст отделяется от текстуры лёгкой светлой тенью-обводкой */
-.mega,.headline,.theme,.cd-num,.cd-sep,.sch-row .t{
-  text-shadow:0 2px 4px rgba(255,252,246,.55), 0 1px 0 rgba(255,252,246,.9);
-}
-.eyebrow{ color:#b34d00; text-shadow:0 1px 2px rgba(255,252,246,.7); }
-.subtitle,.slogan{ text-shadow:0 1px 2px rgba(255,252,246,.7); }
-
-/* ===== АЛЬБОМНАЯ ОРИЕНТАЦИЯ (широкий монитор) ===== */
-@media (orientation: landscape){
-  .topbrand{ padding:clamp(12px,2.4vh,26px) 4vw clamp(4px,1vh,10px); gap:clamp(6px,1.2vh,12px); }
-  .topbrand img{ height:clamp(50px,7.5vh,86px); }
-  .stage{ justify-content:center; gap:clamp(10px,2.2vh,30px);
-    padding:clamp(8px,1.6vh,20px) 5vw clamp(12px,2vh,26px); }
-  /* на широком экране заголовок ниже, но шире — режем высоту, не ширину */
-  .headline{ font-size:clamp(2.4rem,5.4vw,5rem); }
-  .mega{ font-size:clamp(3rem,9vw,8rem); }
-  .theme{ font-size:clamp(2rem,4.6vw,4.4rem); }
-  .cd-num{ font-size:clamp(2.6rem,7.5vw,6.5rem); }
-}
-
-/* ===== КНИЖНАЯ ОРИЕНТАЦИЯ (вертикальный монитор) ===== */
-@media (orientation: portrait){
-  /* компактно и предсказуемо: контент прижат кверху, влезает даже с адресной строкой */
-  .stage{ justify-content:flex-start; gap:clamp(14px,2.2vh,30px);
-    padding:clamp(12px,2vh,28px) 5vw clamp(16px,2.4vh,34px); }
-  .topbrand{ padding:clamp(14px,2.2vh,30px) 5vw clamp(6px,1vh,14px); gap:clamp(6px,1vh,12px); }
-  .topbrand img{ height:clamp(64px,7.5vh,110px); }
-  .eyebrow{ font-size:clamp(1rem,2.1vw,1.7rem); }
-  .headline{ font-size:clamp(2.6rem,8vw,6.5rem); }
-  .mega{ font-size:clamp(3.4rem,12.5vw,10rem); }
-  .theme{ font-size:clamp(2.1rem,5.6vw,4.6rem); }
-  .subtitle{ font-size:clamp(1.4rem,3.2vw,2.6rem); }
-  .slogan{ font-size:clamp(1.35rem,3vw,2.3rem); }
-  .coupon-rule{ font-size:clamp(1.15rem,2.5vw,1.9rem); padding:12px 26px; }
-  .cd-num{ font-size:clamp(3rem,11vw,8.5rem); }
-  .cd-cap{ font-size:clamp(1rem,2vw,1.6rem); }
-  .cd-lbl{ font-size:clamp(.85rem,1.7vw,1.3rem); }
-  .gift .g-val{ font-size:clamp(1.4rem,3.2vw,2.3rem); }
-  .gift{ padding:clamp(14px,2vh,22px) clamp(18px,3vw,30px); }
-  .seg{ height:clamp(16px,2vh,28px); }
-  .lente-nums span{ font-size:clamp(.9rem,1.8vw,1.4rem); }
-}
 </style>
 </head>
 <body>
 <div class="screen" id="screen">
 
-  <div class="topbrand">
-    <img id="logo" src="logo_promebel.png" alt="PRO MEBEL"
-         onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
-    <div class="brand-fallback" id="logoFallback">
-      <div class="brand-hex">P</div>
-      <div class="brand-name">PRO<b>MEBEL</b></div>
+  <div class="header">
+    <div class="brand">
+      <img id="logo" src="logo_promebel.png" alt="PRO MEBEL"
+           onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
+      <div class="brand-fallback" id="logoFallback">
+        <div class="brand-hex">P</div>
+        <div class="brand-name">PRO<b>MEBEL</b></div>
+      </div>
     </div>
     <div class="head-pill"><span class="head-dot"></span><span id="headPill">День клиента · 10 дней</span></div>
   </div>
@@ -316,17 +252,21 @@ html,body{
 
   <div class="footer">
     <div class="f-l">ДЕНЬ КЛИЕНТА — <b>10 ДНЕЙ</b> В PRO MEBEL</div>
-    <div class="f-r" id="footR">20–29 августа · Худжанд</div>
+    <div class="f-r" id="footR">20–31 августа · Худжанд</div>
   </div>
 </div>
 
 <script>
 // ========================= КОНФИГ =========================
-const START = new Date('2026-08-20T00:00:00+05:00'); // День 1, старт акции
-const FINAL = new Date('2026-08-29T15:00:00+05:00'); // День 10, главный розыгрыш
-const DAILY_DRAW_HOUR = 18;   // час дневного розыгрыша (18:00)
-const DAILY_DRAW_MIN  = 0;
+const START = new Date('2026-08-20T00:00:00+05:00'); // День 1, старт акции (чт)
+const FINAL = new Date('2026-08-31T15:00:00+05:00'); // День 10, главный розыгрыш
 const TZ_LABEL = 'Худжанд';
+
+// Воскресенья НЕ считаются днями акции. Индекс = календарный день от START
+// (20.08 = 1). Воскресенья в окне: 23.08 = 4, 30.08 = 11.
+// В эти дни номер «замирает» на прошлом рабочем дне, и общий срок сдвигается:
+// 10-й рабочий день приходится на 31.08.
+const SKIP_DAYS = [4, 11];
 
 const DAYS = [
   { day:1,  title:'10 дней подарков начинаются!', gift:'Стартовый купон каждому покупателю',
@@ -335,8 +275,8 @@ const DAYS = [
     slogan:'Чем больше объём — тем больше купонов.' },
   { day:3,  title:'Мебель начинается с деталей', gift:'Набор инструмента / органайзер / сертификат',
     slogan:'Blum, GTV, Starax, AGT — фурнитура дня.' },
-  { day:4,  title:'Собери свою мебель', gift:'Коробка сюрприз: подарок / скидка / купон',
-    slogan:'Комплект выгоднее: ЛДСП + кромка + фурнитура.' },
+  { day:4,  title:'Счастливая накладная', gift:'Подарок за совпавшую цифру',
+    slogan:'Последняя цифра накладной совпала с числом дня — вы в игре!' },
   { day:5,  title:'Счастливый чек', gift:'Случайные чеки дня получают подарки',
     slogan:'Сегодня каждый чек может стать выигрышным.' },
   { day:6,  title:'Приведи друга', gift:'Дополнительные купоны обоим',
@@ -365,20 +305,18 @@ const DAY_MS = 86400000;
 // «сейчас» — реальное время устройства; window.__NOW__ используется только для отладки/скринов
 function getNow(){ return window.__NOW__ != null ? new Date(window.__NOW__) : new Date(); }
 
-// номер дня 1..10 от абсолютного мгновения START (устойчиво к ЧП монитора)
+// номер рабочего дня 1..10 от START, БЕЗ воскресений (устойчиво к ЧП монитора).
+// Из календарного индекса вычитаем число прошедших «пропущенных» дней (воскресений);
+// если сегодня само воскресенье — номер держится на прошлом рабочем дне.
 function dayNumber(now){
-  return Math.min(10, Math.max(1, Math.floor((now - START) / DAY_MS) + 1));
+  const d0 = Math.floor((now - START) / DAY_MS) + 1;      // календарный день (20.08 = 1)
+  const skipped = SKIP_DAYS.filter(s => s <= d0).length;
+  return Math.min(10, Math.max(1, d0 - skipped));
 }
 // мгновение пункта расписания финала: арифметика от FINAL (15:00) — без привязки к ЧП устройства
 function scheduleInstant(t){
   const [h,m] = t.split(':').map(Number);
   return new Date(FINAL.getTime() + ((h*60 + m) - 15*60) * 60000);
-}
-// мгновение сегодняшнего дневного розыгрыша (18:00) — арифметика от START (00:00 дня 1)
-function todayDrawInstant(now){
-  const d = dayNumber(now);                 // 1..10
-  const dayStart = START.getTime() + (d-1) * DAY_MS;  // 00:00 текущего дня акции
-  return new Date(dayStart + (DAILY_DRAW_HOUR*60 + DAILY_DRAW_MIN) * 60000);
 }
 
 function svgGift(){
@@ -394,13 +332,6 @@ function svgGift(){
 
 function svgBolt(){
   return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>`;
-}
-function svgTicket(){
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M3 8.5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2 2 0 0 0 0-4z"/>
-    <path d="M14 6.5v11" stroke-dasharray="2 2"/>
-  </svg>`;
 }
 
 function pad2(n){ return String(n).padStart(2,'0'); }
@@ -434,12 +365,8 @@ function lenteHTML(activeDay, allDone){
     if(allDone) cls = 'done';
     else if(i < activeDay) cls = 'done';
     else if(i === activeDay) cls = 'today';
-    let numCls = '';
-    if(allDone) numCls = 'done';
-    else if(i < activeDay) numCls = 'done';
-    else if(i === activeDay) numCls = 'on';
     segs += `<div class="seg ${cls}"></div>`;
-    nums += `<span class="${numCls}">${i}</span>`;
+    nums += `<span class="${(!allDone && i===activeDay)?'on':''}">${i}</span>`;
   }
   return `<div class="lente-wrap"><div class="lente">${segs}</div><div class="lente-nums">${nums}</div></div>`;
 }
@@ -463,7 +390,7 @@ function renderStage(state, day){
       <div class="headline">АКЦИЯ<br>НАЧНЁТСЯ ЧЕРЕЗ</div>
       ${countdownHTML('до старта акции')}
       ${lenteHTML(0,false)}
-      <div class="subtitle">10 дней подарков и розыгрышей.<br>Старт 20 августа.</div>`;
+      <div class="subtitle">10 дней подарков и розыгрышей. Старт 20 августа.</div>`;
   }
   else if(state === 'B'){
     const d = DAYS[day-1];
@@ -476,7 +403,7 @@ function renderStage(state, day){
         <div class="g-lbl">Подарок дня</div><div class="g-val">${d.gift}</div></div></div>
       <div class="slogan">${d.slogan}</div>
       <div class="tomorrow">${svgBolt()} ФИНАЛ УЖЕ ЗАВТРА</div>
-      ${countdownHTML('<span id="cdCap">до розыгрыша сегодня в 18:00</span>')}`;
+      ${countdownHTML('до финального SUPER DAY')}`;
   }
   else if(state === 'C'){
     stage.innerHTML = `
@@ -528,7 +455,7 @@ function tick(){
   if(pill) pill.textContent = (state === 'C') ? 'Финальный день · SUPER DAY'
                          : (state === 'D') ? 'Акция завершена'
                          : 'День клиента · 10 дней';
-  if(footR) footR.textContent = '20–29 августа · ' + TZ_LABEL;
+  if(footR) footR.textContent = '20–31 августа · ' + TZ_LABEL;
 
   const key = state + ':' + day;
   if(key !== lastKey){ renderStage(state, day); lastKey = key; }
@@ -536,25 +463,7 @@ function tick(){
   // цель отсчёта
   let target = null;
   if(state === 'A') target = START;
-  else if(state === 'C') target = FINAL;
-  else if(state === 'B'){
-    // считаем до сегодняшнего розыгрыша 18:00; если он прошёл — до завтрашнего (или до финала в день 10)
-    const todayDraw = todayDrawInstant(now);
-    const cap = document.getElementById('cdCap');
-    if(now < todayDraw){
-      target = todayDraw;
-      if(cap) cap.textContent = 'до розыгрыша сегодня в 18:00';
-    } else {
-      // розыгрыш дня прошёл
-      if(day >= 10){
-        target = FINAL;
-        if(cap) cap.textContent = 'до финального SUPER DAY';
-      } else {
-        target = new Date(todayDraw.getTime() + DAY_MS); // завтра 18:00
-        if(cap) cap.textContent = 'до розыгрыша завтра в 18:00';
-      }
-    }
-  }
+  else if(state === 'B' || state === 'C') target = FINAL;
 
   if(target){
     const p = diffParts(target - now);
