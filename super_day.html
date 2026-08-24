@@ -339,8 +339,8 @@ const DAYS = [
     slogan:'Чем больше объём — тем больше купонов.' },
   { day:3,  title:'Мебель начинается с деталей', gift:'Набор инструмента / органайзер / сертификат',
     slogan:'Blum, GTV, Starax, AGT — фурнитура дня.' },
-  { day:4,  title:'Собери свою мебель', gift:'Коробка сюрприз: подарок / скидка / купон',
-    slogan:'Комплект выгоднее: ЛДСП + кромка + фурнитура.' },
+  { day:4,  title:'Счастливая накладная', gift:'Подарок за совпавшую цифру',
+    slogan:'Последняя цифра накладной совпала с числом дня — вы в игре!' },
   { day:5,  title:'Счастливый чек', gift:'Случайные чеки дня получают подарки',
     slogan:'Сегодня каждый чек может стать выигрышным.' },
   { day:6,  title:'Приведи друга', gift:'Дополнительные купоны обоим',
@@ -497,7 +497,6 @@ function renderStage(state, day){
       <div class="gift">${svgGift()}<div class="g-txt">
         <div class="g-lbl">Подарок дня</div><div class="g-val">${d.gift}</div></div></div>
       <div class="slogan">${d.slogan}</div>
-      <div class="coupon-rule">${svgTicket()} Покупка от <b>3000 сомони</b> = <b>1 купон</b> в розыгрыш</div>
       <div class="tomorrow">${svgBolt()} ФИНАЛ УЖЕ ЗАВТРА</div>
       ${countdownHTML('<span id="cdCap">до розыгрыша сегодня в 18:00</span>')}`;
   }
