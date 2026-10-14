@@ -302,55 +302,21 @@ html,body{
   letter-spacing:.04em; color:var(--ink); line-height:1; margin-top:6px; }
 .prize .cap .m span{ color:var(--orange-d); }
 
-/* enter — each new card lands ON TOP of the previous (p1 back → p3 front).
-   Depth comes from DOM order: p1, p2, p3 (p3 last = highest). */
+/* enter — одиночная карточка появляется по центру */
 .prize.p1.enter{ animation:cardIn1 .8s cubic-bezier(.2,.8,.25,1) forwards, sway1 3.6s ease-in-out .8s infinite; }
-.prize.p2.enter{ animation:cardIn2 .8s cubic-bezier(.2,.8,.25,1) forwards, sway2 3.9s ease-in-out .8s infinite; }
-.prize.p3.enter{ animation:cardIn3 .8s cubic-bezier(.2,.8,.25,1) forwards, sway3 4.2s ease-in-out .8s infinite; }
-
-/* back card peeks highest, front card sits centred */
 @keyframes cardIn1{
-  from{ opacity:0; transform:translateY(70px) scale(.86) rotate(0deg); }
-  to  { opacity:1; transform:translateY(-30px) scale(.9) rotate(-6deg); }
+  from{ opacity:0; transform:translateY(70px) scale(.88) rotate(0deg); }
+  to  { opacity:1; transform:translateY(0) scale(1) rotate(-1.5deg); }
 }
-@keyframes cardIn2{
-  from{ opacity:0; transform:translateY(70px) scale(.9) rotate(0deg); }
-  to  { opacity:1; transform:translateY(-13px) scale(.95) rotate(4deg); }
-}
-@keyframes cardIn3{
-  from{ opacity:0; transform:translateY(70px) scale(.94) rotate(0deg); }
-  to  { opacity:1; transform:translateY(8px) scale(1) rotate(-1.5deg); }
-}
-/* gentle left-right sway around each card's resting pose */
+/* лёгкое покачивание */
 @keyframes sway1{
-  0%,100%{ transform:translateY(-30px) scale(.9) rotate(-8deg); }
-  50%    { transform:translateY(-30px) scale(.9) rotate(-4deg); }
-}
-@keyframes sway2{
-  0%,100%{ transform:translateY(-13px) scale(.95) rotate(2deg); }
-  50%    { transform:translateY(-13px) scale(.95) rotate(6deg); }
-}
-@keyframes sway3{
-  0%,100%{ transform:translateY(8px) scale(1) rotate(-3deg); }
-  50%    { transform:translateY(8px) scale(1) rotate(0deg); }
+  0%,100%{ transform:translateY(0) scale(1) rotate(-2.5deg); }
+  50%    { transform:translateY(0) scale(1) rotate(1.5deg); }
 }
 
-/* exit — fly out in 3 directions */
-.prize.p1.exit{ animation:outLeft .9s cubic-bezier(.55,0,.85,.3) forwards; }
-.prize.p2.exit{ animation:outRight .9s cubic-bezier(.55,0,.85,.3) forwards; }
-.prize.p3.exit{ animation:outUp .9s cubic-bezier(.55,0,.85,.3) forwards; }
-@keyframes outLeft{
-  from{ opacity:1; }
-  to  { opacity:0; transform:translate(-130vw,10vh) rotate(-40deg) scale(.8); }
-}
-@keyframes outRight{
-  from{ opacity:1; }
-  to  { opacity:0; transform:translate(130vw,10vh) rotate(40deg) scale(.8); }
-}
-@keyframes outUp{
-  from{ opacity:1; }
-  to  { opacity:0; transform:translate(0,-130vh) rotate(8deg) scale(.8); }
-}
+/* exit — плавно убираем */
+.prize.p1.exit{ animation:cardOut .8s ease forwards; }
+@keyframes cardOut{ from{ opacity:1; } to{ opacity:0; transform:translateY(40px) scale(.9); } }
 
 /* ============ LOADING ============ */
 .loading{
@@ -427,33 +393,13 @@ html,body{
 <div class="overlay" id="overlay">
   <div class="overlay-veil"></div>
   <div class="deck" id="deck">
-    <!-- DOM order = depth: p1 (back) → p3 (front, on top) -->
     <div class="prize p1" data-i="1">
-      <span class="badge">Приз 1</span>
       <div class="media">
         <div class="bg" style="background-image:url('prize_labo.jpg')"></div>
         <img src="prize_labo.jpg" alt="Автомобиль LABO" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
         <div class="ph" style="display:none"><div class="ph-t">LABO</div><div class="ph-s">prize_labo.jpg</div></div>
       </div>
       <div class="cap"><div class="k">Главный приз</div><div class="m">Автомобиль <span>LABO</span></div></div>
-    </div>
-    <div class="prize p2" data-i="2">
-      <span class="badge">Приз 2</span>
-      <div class="media">
-        <div class="bg" style="background-image:url('prize_stanok.jpg')"></div>
-        <img src="prize_stanok.jpg" alt="Кромочный станок" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div class="ph" style="display:none"><div class="ph-t">Станок</div><div class="ph-s">prize_stanok.jpg</div></div>
-      </div>
-      <div class="cap"><div class="k">Главный приз</div><div class="m">Кромочный <span>станок</span></div></div>
-    </div>
-    <div class="prize p3" data-i="3">
-      <span class="badge">Приз 3</span>
-      <div class="media">
-        <div class="bg" style="background-image:url('prize_vietnam.jpg')"></div>
-        <img src="prize_vietnam.jpg" alt="Путёвки во Вьетнам" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div class="ph" style="display:none"><div class="ph-t">Вьетнам</div><div class="ph-s">prize_vietnam.jpg</div></div>
-      </div>
-      <div class="cap"><div class="k">Главный приз</div><div class="m">3 путёвки во <span>Вьетнам</span></div></div>
     </div>
   </div>
 </div>
@@ -595,7 +541,7 @@ const COND_LINES = [
   "Каждые следующие <b>10 000 сом</b> — это <b>+1 купон</b>.",
   "Покупки суммируются в течение <b>нескольких месяцев</b>.",
   "Чем больше купонов — тем <b>выше шанс на победу</b>.",
-  "Три главных приза: <b>LABO</b>, <b>кромочный станок</b>, <b>Вьетнам</b>."
+  "Главный приз — <b>автомобиль LABO</b>."
 ];
 let condIdx = 0;
 function typeLine(){
@@ -627,7 +573,7 @@ function buildTicker(){
     "Купи на <b>50 000 сом</b> — стань участником",
     "<b>+1 купон</b> за каждые <b>10 000 сом</b>",
     "Сумма копится <b>несколько месяцев</b>",
-    "Главные призы: <b>LABO · Станок · Вьетнам</b>"
+    "Главный приз: <b>автомобиль LABO</b>"
   ];
   const one = items.map(t => `<span>${t}</span>`).join('');
   document.getElementById('ticker').innerHTML = one + one;
@@ -635,36 +581,26 @@ function buildTicker(){
 
 // ============ PRIZE DECK CYCLE ============
 const overlay = document.getElementById('overlay');
-const cardsOrder = ['1','2','3']; // показываем LABO → станок → Вьетнам
 function qp(i){ return document.querySelector('.prize.p'+i); }
 
 function showDeck(){
   pauseScroll();
   overlay.classList.add('on');
+  const c = qp(1);
+  c.classList.remove('enter','exit'); c.style.opacity='0';
 
-  // сбрасываем состояния
-  ['1','2','3'].forEach(i => { const c = qp(i); c.classList.remove('enter','exit'); c.style.opacity='0'; });
+  // карточка появляется по центру
+  setTimeout(() => c.classList.add('enter'), 300);
 
-  // карточки появляются по очереди, стопкой как колода
-  const enterDelays = { '1':300, '2':1500, '3':2700 };
-  cardsOrder.forEach(i => {
-    setTimeout(() => qp(i).classList.add('enter'), enterDelays[i]);
-  });
-
-  // держим, потом разлёт в 3 стороны
-  const holdUntil = 2700 + 3600; // последняя вошла + пауза
-  setTimeout(() => {
-    ['1','2','3'].forEach(i => { const c = qp(i); c.classList.remove('enter'); c.classList.add('exit'); });
-  }, holdUntil);
+  // держим, потом убираем
+  const holdUntil = 300 + 800 + 3600; // вошла + пауза
+  setTimeout(() => { c.classList.remove('enter'); c.classList.add('exit'); }, holdUntil);
 
   // прячем оверлей, возвращаем список
   setTimeout(() => {
     overlay.classList.remove('on');
-    setTimeout(() => {
-      ['1','2','3'].forEach(i => { const c = qp(i); c.classList.remove('exit'); c.style.opacity='0'; });
-      startScroll();
-    }, 650);
-  }, holdUntil + 950);
+    setTimeout(() => { c.classList.remove('exit'); c.style.opacity='0'; startScroll(); }, 650);
+  }, holdUntil + 900);
 }
 
 // ============ INIT ============

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>Супер Розыгрыш — PROMEBEL</title>
-<meta name="description" content="Супер розыгрыш PROMEBEL: таблица участников, купоны и призы — LABO, кромочный станок, путёвки во Вьетнам.">
+<meta name="description" content="Супер розыгрыш PROMEBEL: таблица участников, купоны и главный приз — автомобиль LABO.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -360,7 +360,7 @@ body.lock{ overflow:hidden; }
   <section class="hero">
     <div class="kicker">PROMEBEL · Акция для клиентов</div>
     <h1>СУПЕР <span>РОЗЫГРЫШ</span></h1>
-    <p>Покупайте в PROMEBEL, копите купоны и участвуйте в розыгрыше трёх главных призов. Найдите себя в таблице ниже.</p>
+    <p>Покупайте в PROMEBEL, копите купоны и участвуйте в розыгрыше главного приза — автомобиля LABO. Найдите себя в таблице ниже.</p>
     <div class="updated"><span class="dot"></span><span id="updated">Загрузка данных…</span></div>
 
     <div class="stats">
@@ -371,7 +371,7 @@ body.lock{ overflow:hidden; }
 
   <!-- PRIZES -->
   <section class="sec">
-    <div class="sec-head"><div class="t">Главные призы</div><div class="rule"></div><div class="hint">нажмите, чтобы увеличить</div></div>
+    <div class="sec-head"><div class="t">Главный приз</div><div class="rule"></div><div class="hint">нажмите, чтобы увеличить</div></div>
     <div class="prizes" id="prizes"></div>
     <div class="dots" id="dots"></div>
   </section>
@@ -438,9 +438,7 @@ const RELOAD_MS = 60000;   // тихое обновление данных
 const PAGE      = 50;      // сколько строк показывать за раз
 
 const PRIZES = [
-  { img:'prize_labo.jpg',    alt:'Автомобиль LABO',    ph:'LABO',    html:'Автомобиль <span>LABO</span>' },
-  { img:'prize_stanok.jpg',  alt:'Кромочный станок',   ph:'Станок',  html:'Кромочный <span>станок</span>' },
-  { img:'prize_vietnam.jpg', alt:'Путёвки во Вьетнам', ph:'Вьетнам', html:'3 путёвки во <span>Вьетнам</span>' }
+  { img:'prize_labo.jpg', alt:'Автомобиль LABO', ph:'LABO', html:'Автомобиль <span>LABO</span>' }
 ];
 
 const COND_LINES = [
@@ -448,7 +446,7 @@ const COND_LINES = [
   "Каждые следующие <b>10 000 сом</b> — это <b>+1 купон</b>.",
   "Покупки суммируются в течение <b>нескольких месяцев</b>.",
   "Чем больше купонов — тем <b>выше шанс на победу</b>.",
-  "Три главных приза: <b>LABO</b>, <b>кромочный станок</b>, <b>Вьетнам</b>."
+  "Главный приз — <b>автомобиль LABO</b>."
 ];
 
 // ============ HELPERS ============
@@ -465,7 +463,6 @@ const $ = id => document.getElementById(id);
 $('prizes').innerHTML = PRIZES.map((p,i) => `
   <button class="prize" type="button" data-i="${i}">
     <div class="media">
-      <span class="badge">Приз ${i+1}</span>
       <div class="bg" style="background-image:url('${p.img}')"></div>
       <img src="${p.img}" alt="${p.alt}" loading="lazy" onerror="this.style.display='none';this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='flex';">
       <div class="ph" style="display:none"><div class="ph-t">${p.ph}</div></div>
