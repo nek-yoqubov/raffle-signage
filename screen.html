@@ -406,7 +406,8 @@ html,body{
 
 <script>
 // ============ CONFIG ============
-const API_URL   = "https://script.google.com/macros/s/AKfycbxr_b5aQBYW87H6L6rAEuZjYw4SoBE7bysbhplL-C_1hCD90CrzefxBTXY6QriK5DeZMQ/exec";
+const API_URL   = "https://mtvjnkklzyplbxaxwszm.supabase.co/rest/v1/rpc/raffle_public?p_raffle=labo";
+const API_KEY   = "sb_publishable_rM3r9_o443Ij_8ISr-nE7Q_BxKWNnnO";
 const THRESHOLD = 50000;   // сом для первого купона
 const STEP      = 10000;   // сом за каждый следующий купон
 const RELOAD_MS = 60000;   // перезагрузка данных
@@ -457,7 +458,7 @@ function normalize(list){
 async function loadData(){
   let list = null;
   try{
-    const res  = await fetch(API_URL, { cache:'no-store' });
+    const res  = await fetch(API_URL, { cache:'no-store', headers:{ apikey: API_KEY } });
     const json = await res.json();
     if(Array.isArray(json)) list = json;
     else if(json && Array.isArray(json.participants)) list = json.participants;
